@@ -8,8 +8,8 @@
 // @match       *://music.163.com/#/*
 // @include     http://music.163.com/*
 // @noframes
-// @compatible  Firefox, chrome
-// @incompatible    Edge
+// @compatible  firefox, chrome
+// @incompatible    edge
 // @supportURL  http://music.163.com/#/playlist?id=746621854
 // @license GPL
 // ==/UserScript==

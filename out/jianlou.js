@@ -8,11 +8,11 @@
 // @match       *://music.163.com/#/*
 // @include     http://music.163.com/*
 // @noframes
-// @compatible  Firefox, chrome
-// @incompatible    Edge
+// @compatible  firefox, chrome
+// @incompatible    edge
 // @supportURL  http://music.163.com/#/playlist?id=746621854
 // @license GPL
-// ==/UserScript==。
+// ==/UserScript==
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
