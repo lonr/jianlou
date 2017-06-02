@@ -4,8 +4,10 @@
 
 遇到问题也可以到[这里](http://music.163.com/#/playlist?id=746621854)讨论。
 
-。。可能也没啥人用。。
+可能也没啥人用😢
 
-## 乞讨
+## “你们…… 有没有……”
 
-![乞讨](https://github.com/lonr/jianlou/blob/master/wechat.png?raw=true)
+<img src="https://github.com/lonr/jianlou/blob/master/wechat.png?raw=true" width="300" alt="谢谢打赏">
+
+## GPL licensed

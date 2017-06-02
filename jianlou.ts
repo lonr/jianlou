@@ -1,12 +1,17 @@
 // ==UserScript==
 // @name        云音乐捡漏
+// @description 本脚本可以帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
 // @namespace   lonr.github.io
-// @version     0.0.1
+// @version     0.0.2
 // @author      lonr
 // @grant       GM_addStyle
 // @match       *://music.163.com/#/*
 // @include     http://music.163.com/*
 // @noframes
+// @compatible  Firefox, chrome
+// @incompatible    Edge
+// @supportURL  http://music.163.com/#/playlist?id=746621854
+// @license GPL
 // ==/UserScript==
 
 declare function GM_addStyle(css: string): void;
@@ -31,7 +36,7 @@ interface Options {
 }
 
 class Picker {
-    static version = '0.0.1';
+    static version = '0.0.2';
     static options: Options = {
         limit: 3,
         // ture（默认）或者 false（收藏前 limit 个） 
@@ -86,7 +91,7 @@ class Picker {
                 本脚本能帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
             </p>
             <p>
-                请登陆并通过<a href="${(this.document.querySelector('.itm-1') as HTMLAnchorElement).href}">“我的主页”</a>或者<a href="http://music.163.com/discover/playlist">“发现音乐-歌单”</a>打开任一歌单
+                请登录并通过<a href="${(this.document.querySelector('.itm-1') as HTMLAnchorElement).href}">“我的主页”</a>或者<a href="http://music.163.com/discover/playlist">“发现音乐-歌单”</a>打开任一歌单
             </p>
             <div class="jl-options">
                 <div class="jl-limit">
@@ -357,7 +362,6 @@ class Picker {
      */
     async postList(kgl?: File) {
         if (!kgl) {
-            // await this.addSongs();
             kgl = this.createKgl();
         }
         let fd = new FormData();
