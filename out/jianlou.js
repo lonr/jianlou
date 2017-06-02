@@ -1,4 +1,3 @@
-"use strict";
 // ==UserScript==
 // @name        云音乐捡漏
 // @description 一个帮助收藏网易云歌曲的脚本
@@ -12,6 +11,7 @@
 // @compatible  Firefox, chrome
 // @incompatible    Edge
 // ==/UserScript==
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
