@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        云音乐捡漏
-// @description 一个帮助收藏网易云歌曲的脚本
+// @description 本脚本可以帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
 // @namespace   lonr.github.io
 // @version     0.0.2
 // @author      lonr
@@ -10,7 +10,9 @@
 // @noframes
 // @compatible  Firefox, chrome
 // @incompatible    Edge
-// ==/UserScript==
+// @supportURL  http://music.163.com/#/playlist?id=746621854
+// @license GPL
+// ==/UserScript==。
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
