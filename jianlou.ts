@@ -66,7 +66,7 @@ class Picker {
 
     constructor(public window: Window) {
         this.document = window.document;
-        // iframe 是不变的，切换页面后 document 会变！！！
+        // iframe window 是不变的，切换页面后 document 会变！！！
         this.innerWindow = (window.document.getElementById('g_iframe') as HTMLIFrameElement).contentWindow;
         this.innerDocument = this.innerWindow.document;
         this.addUI();
@@ -212,7 +212,7 @@ class Picker {
     async start() {
         this.isRunning = true;
         await this.setSongs();
-        this.log('创建歌单完成，上传中。。。');
+        this.log('创建歌单完成，上传并等待服务器处理中');
         await this.postList();
         this.isRunning = false;
     }
@@ -389,10 +389,10 @@ class Picker {
             if (json.code !== 200) {
                 this.log('貌似上传失败了');
             } else if (Number(json.addedPlaylists) > 0) {
-                let addedSongs = json.addedSongs || 0;
-                let matchedSongs = json.matchedSongs || 0;
-                let unmatchedSongs = json.unmatchedSongs || 0;
-                let duplicatedSongs = json.duplicatedSongs || 0;
+                let addedSongs = json.addedSongs || '0';
+                let matchedSongs = json.matchedSongs || '0';
+                let unmatchedSongs = json.unmatchedSongs || '0';
+                let duplicatedSongs = json.duplicatedSongs || '0';
                 this.log(`上传成功，匹配：${matchedSongs} 首，重复：${duplicatedSongs} 首，未匹配：${unmatchedSongs} 首，添加：${addedSongs} 首。`);
                 let linkWrapEle = this.UIEle!.querySelector('.jl-newList')!;
                 linkWrapEle.textContent = '';
