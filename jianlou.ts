@@ -39,7 +39,7 @@ class Picker {
     static version = '0.0.2';
     static options: Options = {
         limit: 3,
-        // ture（默认）或者 false（收藏前 limit 个） 
+        // true（默认）或者 false（收藏前 limit 个） 
         // 只收藏比歌单里歌曲更热门的歌曲（不管怎样：原来的歌是在的）
         nevermore: true,
         // 请求间隔毫秒数（每个歌手会请求一次，不知道多少会被 ban）
@@ -219,7 +219,7 @@ class Picker {
 
     setOptions() {
         let nevermore = true;
-        // 获取设置的 nervermore 值
+        // 获取设置的 nevermore 值
         Array.from(this.UIEle!.querySelectorAll('.jl-nevermore p input')!).forEach((ele) => {
             let radio = ele as HTMLInputElement;
             radio.checked ? nevermore = radio.value === 'true' ? true : false : 0;
