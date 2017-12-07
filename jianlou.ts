@@ -2,7 +2,7 @@
 // @name        云音乐捡漏
 // @description 本脚本可以帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
 // @namespace   lonr.github.io
-// @version     0.0.2
+// @version     0.0.3
 // @author      lonr
 // @grant       GM_addStyle
 // @match       *://music.163.com/#/*
@@ -36,7 +36,7 @@ interface Options {
 }
 
 class Picker {
-    static version = '0.0.2';
+    static version = '0.0.3';
     static options: Options = {
         limit: 3,
         // true（默认）或者 false（收藏前 limit 个） 
@@ -95,7 +95,7 @@ class Picker {
             </p>
             <div class="jl-options">
                 <div class="jl-limit">
-                    <h2><label for="limit">收藏热门歌曲前 TOP <input type="number" name="limit" id="limit" value="3" min="0" max="10"></label></h2>
+                    <h2><label for="limit">收藏热门歌曲 TOP <input type="number" name="limit" id="limit" value="3" min="0" max="10"></label></h2>
                 </div>
                 <div class="jl-nevermore">
                     <h2>，但只收藏更热门的歌曲？</h2>
@@ -117,7 +117,7 @@ class Picker {
                     
                 </p>
             </div>
-            <p class="jl-about">如需帮助可以到<a href="http://music.163.com/#/playlist?id=746621854" target="_blank">这份歌单</a>下查看或提问</p>
+            <p class="jl-about">如需帮助可以<a href="mailto:lonr@live.cn">邮件我</a></p>
         `;
         this.document.body.appendChild(container);
         GM_addStyle(`
@@ -243,7 +243,7 @@ class Picker {
             let songHref = songEle.getAttribute('href') || '';
 
             let artistEle = song.querySelector('td:nth-of-type(4) > div > span') as HTMLElement;
-            let name = artistEle.textContent!.replace(/\s/g, ' ');
+            let name = artistEle.title.replace(/\s/g, ' ');
             // FIXME：多作者歌曲、无详情页作者
             let anchor = artistEle.querySelector('a');
             let homepage = anchor ? (anchor.getAttribute('href') || '') : '';
