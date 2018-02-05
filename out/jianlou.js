@@ -1,8 +1,9 @@
+"use strict";
 // ==UserScript==
-// @name        云音乐捡漏
+// @name        网易云音乐拾遗
 // @description 本脚本可以帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
 // @namespace   lonr.github.io
-// @version     0.0.3
+// @version     0.0.4
 // @author      lonr
 // @grant       GM_addStyle
 // @match       *://music.163.com/#/*
@@ -80,21 +81,21 @@ var Picker = /** @class */ (function () {
         var _this = this;
         var container = this.UIEle = this.document.createElement('aside');
         container.className = 'jl-UI';
-        container.innerHTML = "\n            <h1>\n                \u4E91\u97F3\u4E50\u6361\u6F0F " + Picker.version + " by lonr\n            </h1>\n            <p>\n                \u672C\u811A\u672C\u80FD\u5E2E\u4F60\u6536\u96C6\u4EFB\u610F\u6B4C\u5355\u91CC\u6D89\u53CA\u6B4C\u624B\u7684\u70ED\u95E8\u6B4C\u66F2\u5230\u4E00\u4EFD\u65B0\u7684\u6B4C\u5355\u4E2D\n            </p>\n            <p>\n                \u8BF7\u767B\u5F55\u5E76\u901A\u8FC7<a href=\"" + this.document.querySelector('.itm-1').href + "\">\u201C\u6211\u7684\u4E3B\u9875\u201D</a>\u6216\u8005<a href=\"http://music.163.com/discover/playlist\">\u201C\u53D1\u73B0\u97F3\u4E50-\u6B4C\u5355\u201D</a>\u6253\u5F00\u4EFB\u4E00\u6B4C\u5355\n            </p>\n            <div class=\"jl-options\">\n                <div class=\"jl-limit\">\n                    <h2><label for=\"limit\">\u6536\u85CF\u70ED\u95E8\u6B4C\u66F2 TOP <input type=\"number\" name=\"limit\" id=\"limit\" value=\"3\" min=\"0\" max=\"10\"></label></h2>\n                </div>\n                <div class=\"jl-nevermore\">\n                    <h2>\uFF0C\u4F46\u53EA\u6536\u85CF\u66F4\u70ED\u95E8\u7684\u6B4C\u66F2\uFF1F</h2>\n                    <p>\n                        <input type=\"radio\" name=\"nevermore\" id=\"nevermore-true\" checked value=\"true\"><label for=\"nevermore-true\">\u662F</label>\n                        <input type=\"radio\" name=\"nevermore\" id=\"nevermore-false\" value=\"false\"><label for=\"nevermore-false\">\u5426</label>\n                    </p>\n                </div>\n                <div class=\"jl-listName\">\n                    <h2>\u65B0\u6B4C\u5355\u7684\u540D\u79F0\uFF08\u53EF\u4EE5\u5C06\u201C\u539F\u6B4C\u5355\u540D\u201D\u4FDD\u7559\u7528\u4F5C\u53D8\u91CF\u3002\u91CD\u540D\u53EF\u80FD\u4F1A\u8986\u76D6\u539F\u6765\u7684\u6B4C\u5355\uFF09\uFF1A</h2>\n                    <p><input type=\"text\" name=\"listName\" id=\"listName\" value=\"\u6361\u6F0F-\u539F\u6B4C\u5355\u540D\"></p>\n                </div>\n                <p>\n                    <button class=\"jl-start\" " + (this.isAbleToStart ? '' : 'disabled ') + "type=\"button\">" + (this.isAbleToStart ? '点击这里开始捡漏' : '不在歌单页面或者正在运行中') + "</button>\n                </p>      \n                <p class=\"jl-log\">\u8BF7\u8FDB\u5165\u4EFB\u4E00\u6B4C\u5355\u9875\u4EE5\u4F7F\u7528\u672C\u811A\u672C\n                </p>      \n                <p class=\"jl-newList\">\n                    \n                </p>\n            </div>\n            <p class=\"jl-about\">\u5982\u9700\u5E2E\u52A9\u53EF\u4EE5<a href=\"mailto:lonr@live.cn\">\u90AE\u4EF6\u6211</a></p>\n        ";
+        container.innerHTML = "\n            <h1>\n                \u7F51\u6613\u4E91\u97F3\u4E50\u62FE\u9057 " + Picker.version + " by lonr\n            </h1>\n            <p>\n                \u672C\u811A\u672C\u80FD\u5E2E\u4F60\u6536\u96C6\u4EFB\u610F\u6B4C\u5355\u91CC\u6D89\u53CA\u6B4C\u624B\u7684\u70ED\u95E8\u6B4C\u66F2\u5230\u4E00\u4EFD\u65B0\u7684\u6B4C\u5355\u4E2D\n            </p>\n            <p>\n                \u8BF7\u767B\u5F55\u5E76\u901A\u8FC7<a href=\"" + this.document.querySelector('.itm-1').href + "\">\u201C\u6211\u7684\u4E3B\u9875\u201D</a>\u6216\u8005<a href=\"http://music.163.com/discover/playlist\">\u201C\u53D1\u73B0\u97F3\u4E50-\u6B4C\u5355\u201D</a>\u6253\u5F00\u4EFB\u4E00\u6B4C\u5355\n            </p>\n            <div class=\"jl-options\">\n                <div class=\"jl-limit\">\n                    <h2><label for=\"limit\">\u6536\u85CF\u70ED\u95E8\u6B4C\u66F2 TOP <input type=\"number\" name=\"limit\" id=\"limit\" value=\"3\" min=\"0\" max=\"10\"></label></h2>\n                </div>\n                <div class=\"jl-nevermore\">\n                    <h2>\uFF0C\u4F46\u53EA\u6536\u85CF\u66F4\u70ED\u95E8\u7684\u6B4C\u66F2\uFF1F</h2>\n                    <p>\n                        <input type=\"radio\" name=\"nevermore\" id=\"nevermore-true\" checked value=\"true\"><label for=\"nevermore-true\">\u662F</label>\n                        <input type=\"radio\" name=\"nevermore\" id=\"nevermore-false\" value=\"false\"><label for=\"nevermore-false\">\u5426</label>\n                    </p>\n                </div>\n                <div class=\"jl-allNew\">\n                    <h2>\u4E22\u5F03\u539F\u6B4C\u66F2\uFF1F</h2>\n                    <p>\n                        <input type=\"radio\" name=\"allNew\" id=\"allNew-true\" checked value=\"true\"><label for=\"allNew-true\">\u662F</label>\n                        <input type=\"radio\" name=\"allNew\" id=\"allNew-false\" value=\"false\"><label for=\"allNew-false\">\u5426</label>\n                    </p>\n                </div>\n                <p>\n                    <button class=\"jl-start\" " + (this.isAbleToStart ? '' : 'disabled ') + "type=\"button\">" + (this.isAbleToStart ? '点击这里开始拾遗' : '不在歌单页面或者正在运行中') + "</button>\n                </p>      \n                <p class=\"jl-log\">\u8BF7\u8FDB\u5165\u4EFB\u4E00\u6B4C\u5355\u9875\u4EE5\u4F7F\u7528\u672C\u811A\u672C\n                </p>      \n                <p class=\"jl-newList\">\n                    \n                </p>\n            </div>\n            <p class=\"jl-about\">\u5982\u9700\u5E2E\u52A9\u53EF\u4EE5<a href=\"mailto:lonr@live.cn\">\u90AE\u4EF6\u6211</a></p>\n        ";
         this.document.body.appendChild(container);
-        GM_addStyle("\n            .jl-UI {\n                position: absolute;\n                right: 2em;\n                top: 100px;\n                width: 15em;\n                padding: 1em;\n                font-size: 14px;\n                font-family: sans-serif;\n                background: #fff;\n            }\n            .jl-UI h1 {\n                text-align: center;\n                margin-bottom: 1em;\n            }\n            .jl-UI p:first-of-type {\n                margin-bottom: 0.5em;\n            }\n            .jl-UI a {\n                color: #C10D0C;\n            }\n            .jl-options {\n                margin-top: 1em;\n                margin-bottom: 1em;\n            }\n            .jl-options p {\n                text-align: center;\n                margin: 0.5em 0;\n            }\n            .jl-UI input, .jl-UI button {\n                font-size: 14px;\n            }\n            .jl-nevermore input {\n                width: 2em;\n            }\n            .jl-limit input {\n                margin-right: 0.5em;\n                width: 3em;\n            }\n            .jl-start {\n                margin: 0.5em 0;\n                border: solid 1px #C10D0C !important;\n                padding: 0.2em 0.2em;\n                color: #C10D0C;\n                background: #fff;\n            }\n            .jl-start[disabled] {\n                border-color: grey !important;\n                color: grey;         \n                cursor: no-drop;\n            }\n            .jl-log {\n                white-space: pre-line;\n            }\n        ");
+        GM_addStyle("\n            .jl-UI {\n                position: absolute;\n                right: 2em;\n                top: 100px;\n                width: 15em;\n                padding: 1em;\n                font-size: 14px;\n                font-family: sans-serif;\n                background: #fff;\n            }\n            .jl-UI h1 {\n                text-align: center;\n                margin-bottom: 1em;\n            }\n            .jl-UI p:first-of-type {\n                margin-bottom: 0.5em;\n            }\n            .jl-UI a {\n                color: #C10D0C;\n            }\n            .jl-options {\n                margin-top: 1em;\n                margin-bottom: 1em;\n            }\n            .jl-options p {\n                text-align: center;\n                margin: 0.5em 0;\n            }\n            .jl-UI input, .jl-UI button {\n                font-size: 14px;\n            }\n            .jl-nevermore input, .jl-allNew input {\n                width: 2em;\n            }\n            .jl-limit input {\n                margin-right: 0.5em;\n                width: 3em;\n            }\n            .jl-start {\n                margin: 0.5em 0;\n                border: solid 1px #C10D0C !important;\n                padding: 0.2em 0.2em;\n                color: #C10D0C;\n                background: #fff;\n            }\n            .jl-start[disabled] {\n                border-color: grey !important;\n                color: grey;         \n                cursor: no-drop;\n            }\n            .jl-log {\n                white-space: pre-line;\n            }\n        ");
         this.loggerEle = this.document.querySelector('.jl-log');
         this.startEle = this.document.querySelector('.jl-start');
         this.startEle.addEventListener('click', function () {
             _this.setStartBtn(false);
             _this.setOptions();
-            _this.start()["catch"](_this.log);
+            _this.start().catch(_this.log);
         });
     };
     Picker.prototype.setStartBtn = function (active) {
         if (active) {
             this.startEle.disabled = false;
-            this.startEle.innerText = '点击这里开始捡漏';
+            this.startEle.innerText = '点击这里开始';
         }
         else {
             this.startEle.disabled = true;
@@ -136,16 +137,13 @@ var Picker = /** @class */ (function () {
         });
     };
     Picker.prototype.setOptions = function () {
-        var nevermore = true;
-        // 获取设置的 nevermore 值
-        Array.from(this.UIEle.querySelectorAll('.jl-nevermore p input')).forEach(function (ele) {
-            var radio = ele;
-            radio.checked ? nevermore = radio.value === 'true' ? true : false : 0;
-        });
-        Picker.options.nevermore = nevermore;
+        var nevermoreTrueRadio = this.UIEle.querySelector('.jl-nevermore #nevermore-true');
+        Picker.options.nevermore = nevermoreTrueRadio.checked;
+        var allNewTrueRadio = this.UIEle.querySelector('.jl-allNew #allNew-true');
+        Picker.options.allNew = allNewTrueRadio.checked;
         Picker.options.limit = Number(this.UIEle.querySelector('#limit').value);
-        var listName = this.innerDocument.querySelector('.f-ff2.f-brk').textContent;
-        Picker.options.listName = this.UIEle.querySelector('#listName').value.replace('原歌单名', listName);
+        // let listName = this.innerDocument.querySelector('.f-ff2.f-brk')!.textContent;
+        // Picker.options.listName = (this.UIEle!.querySelector('#listName') as HTMLInputElement).value.replace('原歌单名', listName!);
     };
     Picker.prototype.getArtistsList = function () {
         this.artists = [];
@@ -153,12 +151,13 @@ var Picker = /** @class */ (function () {
         var songList = this.innerDocument.querySelector('.m-table tbody').children;
         for (var _i = 0, _a = Array.from(songList); _i < _a.length; _i++) {
             var song = _a[_i];
-            var songEle = song.querySelector('.f-cb a');
-            var songName = songEle.textContent.replace(/\s/g, ' ');
+            var songEle = song.querySelector('.f-cb a b');
+            var songName = songEle.title.replace(/\s/g, ' ');
             var songHref = songEle.getAttribute('href') || '';
             var artistEle = song.querySelector('td:nth-of-type(4) > div > span');
             var name_1 = artistEle.title.replace(/\s/g, ' ');
             // FIXME：多作者歌曲、无详情页作者
+            // 2018年2月5日：就不！
             var anchor = artistEle.querySelector('a');
             var homepage = anchor ? (anchor.getAttribute('href') || '') : '';
             var index = this.artistsMap.indexOf(name_1);
@@ -174,7 +173,7 @@ var Picker = /** @class */ (function () {
             }
             this.artists[index].songs.push({
                 songName: songName,
-                songHref: songHref
+                songHref: songHref,
             });
         }
         this.log("\u6B64\u6B4C\u5355\u5171\u6709 " + this.artists.length + " \u4F4D\u6B4C\u624B");
@@ -187,7 +186,6 @@ var Picker = /** @class */ (function () {
     Picker.prototype.setTopSongs = function (artist) {
         return fetch(artist.homepage).then(function (response) {
             if (response.status !== 200) {
-                // console.log(response.status);
                 return Promise.reject(response.status);
             }
             return response.text();
@@ -205,19 +203,20 @@ var Picker = /** @class */ (function () {
                     songHref: list.firstElementChild.getAttribute('href') || ''
                 });
             }
-        })["catch"](function (reason) {
+        }).catch(function (reason) {
             console.log("\u83B7\u5F97\u70ED\u95E8\u6B4C\u66F2\u65F6\u51FA\u9519\uFF1A" + reason);
         });
     };
     // 按照设置添加将要收藏的歌曲
     Picker.prototype.setSongs = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var limit, nevermore, delay, artistCount, _i, _a, artist, songNameSet, len, rank, songName;
+            var limit, nevermore, allNew, delay, artistCount, _i, _a, artist, songNameSet, len, rank, songName;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         limit = Picker.options.limit;
                         nevermore = Picker.options.nevermore;
+                        allNew = Picker.options.allNew;
                         delay = Picker.options.delay;
                         artistCount = this.artists.length;
                         _i = 0, _a = this.artists;
@@ -230,15 +229,19 @@ var Picker = /** @class */ (function () {
                             return [3 /*break*/, 4];
                         }
                         songNameSet = new Set(artist.songs.map(function (song) { return song.songName; }));
+                        if (allNew)
+                            artist.songs = [];
+                        // NEVER TODO：并发
                         return [4 /*yield*/, this.setTopSongs(artist)];
                     case 2:
+                        // NEVER TODO：并发
                         _b.sent();
                         len = artist.topSongs.length;
                         limit = limit <= len ? limit : len;
                         for (rank = 0; rank < limit; rank++) {
                             songName = artist.topSongs[rank].songName;
                             if (songNameSet.has(songName)) {
-                                songNameSet["delete"](songName);
+                                songNameSet.delete(songName);
                                 continue;
                             }
                             if (nevermore && songNameSet.size === 0) {
@@ -268,7 +271,7 @@ var Picker = /** @class */ (function () {
     Picker.prototype.createKgl = function (artists) {
         if (artists === void 0) { artists = this.artists; }
         var xmldom = document.implementation.createDocument(null, 'List', null);
-        xmldom.documentElement.setAttribute('ListName', Picker.options.listName);
+        xmldom.documentElement.setAttribute('ListName', '歌单名坏掉了！');
         for (var _i = 0, artists_1 = artists; _i < artists_1.length; _i++) {
             var artist = artists_1[_i];
             for (var _a = 0, _b = artist.songs; _a < _b.length; _a++) {
@@ -281,7 +284,8 @@ var Picker = /** @class */ (function () {
             }
         }
         var str = new XMLSerializer().serializeToString(xmldom);
-        return new File([str], Picker.options.listName + '.kgl');
+        // return new File([str], Picker.options.listName + '.kgl');
+        return new File([str], '歌单名坏掉了.kgl');
     };
     /**
      * 从歌单 xml 文件（不指定参数则从实例中取得）生成 formdata 并 post 之
@@ -311,9 +315,6 @@ var Picker = /** @class */ (function () {
                                 credentials: 'same-origin',
                                 body: fd
                             }).then(function (response) {
-                                // if (response.status !== 200) {
-                                //     return Promise.reject(response.status);
-                                // }
                                 if (response.status === 200) {
                                     console.log('歌单上传成功');
                                 }
@@ -335,7 +336,7 @@ var Picker = /** @class */ (function () {
                                     link.textContent = '点击这里查看新歌单';
                                     linkWrapEle.appendChild(link);
                                 }
-                            })["catch"](function (reason) {
+                            }).catch(function (reason) {
                                 _this.log("\u6B4C\u5355\u4E0A\u4F20\u5931\u8D25\uFF1A" + reason);
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
@@ -356,16 +357,15 @@ var Picker = /** @class */ (function () {
             console.log(message);
         }
     };
-    Picker.version = '0.0.3';
+    Picker.version = '0.0.4';
     Picker.options = {
         limit: 3,
         // true（默认）或者 false（收藏前 limit 个） 
         // 只收藏比歌单里歌曲更热门的歌曲（不管怎样：原来的歌是在的）
         nevermore: true,
         // 请求间隔毫秒数（每个歌手会请求一次，不知道多少会被 ban）
+        allNew: true,
         delay: 0,
-        // 默认设置为“拾遗-”跟上原歌单名
-        listName: ''
     };
     return Picker;
 }());

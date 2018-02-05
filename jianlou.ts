@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name        云音乐捡漏
+// @name        网易云音乐拾遗
 // @description 本脚本可以帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
 // @namespace   lonr.github.io
-// @version     0.0.3
+// @version     0.0.4
 // @author      lonr
 // @grant       GM_addStyle
 // @match       *://music.163.com/#/*
@@ -31,21 +31,23 @@ interface Artist {
 interface Options {
     limit: number;
     nevermore: boolean;
+    allNew: boolean;
     delay: number;
-    listName: string;
+    // listName: string;
 }
 
 class Picker {
-    static version = '0.0.3';
+    static version = '0.0.4';
     static options: Options = {
         limit: 3,
         // true（默认）或者 false（收藏前 limit 个） 
         // 只收藏比歌单里歌曲更热门的歌曲（不管怎样：原来的歌是在的）
         nevermore: true,
         // 请求间隔毫秒数（每个歌手会请求一次，不知道多少会被 ban）
+        allNew: true,
         delay: 0,
         // 默认设置为“拾遗-”跟上原歌单名
-        listName: '',
+        // listName: '',
     };
     artistsMap: string[] = [];
     artists: Artist[] = [];
@@ -85,7 +87,7 @@ class Picker {
         container.className = 'jl-UI';
         container.innerHTML = `
             <h1>
-                云音乐捡漏 ${Picker.version} by lonr
+                网易云音乐拾遗 ${Picker.version} by lonr
             </h1>
             <p>
                 本脚本能帮你收集任意歌单里涉及歌手的热门歌曲到一份新的歌单中
@@ -104,12 +106,15 @@ class Picker {
                         <input type="radio" name="nevermore" id="nevermore-false" value="false"><label for="nevermore-false">否</label>
                     </p>
                 </div>
-                <div class="jl-listName">
-                    <h2>新歌单的名称（可以将“原歌单名”保留用作变量。重名可能会覆盖原来的歌单）：</h2>
-                    <p><input type="text" name="listName" id="listName" value="捡漏-原歌单名"></p>
+                <div class="jl-allNew">
+                    <h2>丢弃原歌曲？</h2>
+                    <p>
+                        <input type="radio" name="allNew" id="allNew-true" checked value="true"><label for="allNew-true">是</label>
+                        <input type="radio" name="allNew" id="allNew-false" value="false"><label for="allNew-false">否</label>
+                    </p>
                 </div>
                 <p>
-                    <button class="jl-start" ${this.isAbleToStart ? '' : 'disabled '}type="button">${this.isAbleToStart ? '点击这里开始捡漏' : '不在歌单页面或者正在运行中'}</button>
+                    <button class="jl-start" ${this.isAbleToStart ? '' : 'disabled '}type="button">${this.isAbleToStart ? '点击这里开始拾遗' : '不在歌单页面或者正在运行中'}</button>
                 </p>      
                 <p class="jl-log">请进入任一歌单页以使用本脚本
                 </p>      
@@ -152,7 +157,7 @@ class Picker {
             .jl-UI input, .jl-UI button {
                 font-size: 14px;
             }
-            .jl-nevermore input {
+            .jl-nevermore input, .jl-allNew input {
                 width: 2em;
             }
             .jl-limit input {
@@ -187,7 +192,7 @@ class Picker {
     setStartBtn(active: boolean) {
         if (active) {
             (this.startEle as HTMLButtonElement).disabled = false;
-            (this.startEle as HTMLButtonElement).innerText = '点击这里开始捡漏';
+            (this.startEle as HTMLButtonElement).innerText = '点击这里开始';
         } else {
             (this.startEle as HTMLButtonElement).disabled = true;
             (this.startEle as HTMLButtonElement).innerText = '不在歌单页面或者正在运行中';
@@ -218,18 +223,16 @@ class Picker {
     }
 
     setOptions() {
-        let nevermore = true;
-        // 获取设置的 nevermore 值
-        Array.from(this.UIEle!.querySelectorAll('.jl-nevermore p input')!).forEach((ele) => {
-            let radio = ele as HTMLInputElement;
-            radio.checked ? nevermore = radio.value === 'true' ? true : false : 0;
-        })
-        Picker.options.nevermore = nevermore;
+        let nevermoreTrueRadio = this.UIEle!.querySelector('.jl-nevermore #nevermore-true')! as HTMLInputElement
+        Picker.options.nevermore = nevermoreTrueRadio.checked;
+
+        let allNewTrueRadio = this.UIEle!.querySelector('.jl-allNew #allNew-true')! as HTMLInputElement
+        Picker.options.allNew = allNewTrueRadio.checked;
 
         Picker.options.limit = Number((this.UIEle!.querySelector('#limit') as HTMLInputElement).value);
 
-        let listName = this.innerDocument.querySelector('.f-ff2.f-brk')!.textContent;
-        Picker.options.listName = (this.UIEle!.querySelector('#listName') as HTMLInputElement).value.replace('原歌单名', listName!);
+        // let listName = this.innerDocument.querySelector('.f-ff2.f-brk')!.textContent;
+        // Picker.options.listName = (this.UIEle!.querySelector('#listName') as HTMLInputElement).value.replace('原歌单名', listName!);
     }
 
 
@@ -238,13 +241,14 @@ class Picker {
         this.artistsMap = [];
         let songList = this.innerDocument.querySelector('.m-table tbody')!.children;
         for (let song of Array.from(songList)) {
-            let songEle = song.querySelector('.f-cb a') as HTMLAnchorElement;
-            let songName = songEle.textContent!.replace(/\s/g, ' ');
+            let songEle = song.querySelector('.f-cb a b') as HTMLElement;
+            let songName = songEle.title.replace(/\s/g, ' ');
             let songHref = songEle.getAttribute('href') || '';
 
             let artistEle = song.querySelector('td:nth-of-type(4) > div > span') as HTMLElement;
             let name = artistEle.title.replace(/\s/g, ' ');
             // FIXME：多作者歌曲、无详情页作者
+            // 2018年2月5日：就不！
             let anchor = artistEle.querySelector('a');
             let homepage = anchor ? (anchor.getAttribute('href') || '') : '';
 
@@ -280,7 +284,6 @@ class Picker {
     setTopSongs(artist: Artist) {
         return fetch(artist.homepage!).then((response) => {
             if (response.status !== 200) {
-                // console.log(response.status);
                 return Promise.reject(response.status);
             }
             return response.text();
@@ -306,6 +309,7 @@ class Picker {
     async setSongs() {
         let limit = Picker.options.limit;
         let nevermore = Picker.options.nevermore;
+        let allNew = Picker.options.allNew;
         let delay = Picker.options.delay;
         let artistCount = this.artists.length;
         for (let artist of this.artists) {
@@ -314,6 +318,8 @@ class Picker {
                 continue;
             }
             let songNameSet = new Set(artist.songs.map(song => song.songName));
+            if (allNew) artist.songs = [];
+            // NEVER TODO：并发
             await this.setTopSongs(artist);
             let len = artist.topSongs.length;
             limit = limit <= len ? limit : len;
@@ -342,7 +348,7 @@ class Picker {
      */
     createKgl(artists = this.artists) {
         let xmldom = document.implementation.createDocument(null, 'List', null);
-        xmldom.documentElement.setAttribute('ListName', Picker.options.listName);
+        xmldom.documentElement.setAttribute('ListName', '歌单名坏掉了！');
         for (let artist of artists) {
             for (let song of artist.songs) {
                 let fileTag = xmldom.createElement('File');
@@ -353,7 +359,9 @@ class Picker {
             }
         }
         let str = new XMLSerializer().serializeToString(xmldom);
-        return new File([str], Picker.options.listName + '.kgl');
+        // return new File([str], Picker.options.listName + '.kgl');
+        return new File([str], '歌单名坏掉了.kgl');
+        
     }
 
     /**
@@ -378,9 +386,6 @@ class Picker {
             credentials: 'same-origin',
             body: fd
         }).then((response) => {
-            // if (response.status !== 200) {
-            //     return Promise.reject(response.status);
-            // }
             if (response.status === 200) {
                 console.log('歌单上传成功');
             }
